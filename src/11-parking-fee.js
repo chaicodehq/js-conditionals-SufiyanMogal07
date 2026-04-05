@@ -32,6 +32,42 @@
  * @param {string} vehicleType - "car", "motorcycle", or "bus"
  * @returns {number} Parking fee or -1 for invalid input
  */
+
+//  * Rates (first hour / each additional hour):
+//  *   - "car":        $5 first hour, then $3/hour
+//  *   - "motorcycle": $3 first hour, then $2/hour
+//  *   - "bus":        $10 first hour, then $7/hour
+//  *
+//  * Daily Maximum (fee can never exceed this):
+//  *   - "car":        $30
+//  *   - "motorcycle": $18
+//  *   - "bus":        $60
+//  *
 export function calculateParkingFee(hours, vehicleType) {
-  // Your code here
+  const vehicles = ["car", "motorcycle", "bus"];
+
+  hours = Math.ceil(hours);
+  if (
+    hours <= 0 ||
+    !Number.isInteger(hours) ||
+    !vehicles.includes(vehicleType)
+  ) {
+    return -1;
+  }
+
+  const maximumFee = { car: 30, motorcycle: 18, bus: 60 };
+  const vehicleRateHour = { car: [5, 3], motorcycle: [3, 2], bus: [10, 7] };
+
+  let parkingFee = vehicleRateHour[vehicleType][0];
+  hours -= 1;
+
+  if (hours >= 1) {
+    parkingFee += vehicleRateHour[vehicleType][1] * hours;
+  }
+  
+  if(parkingFee > maximumFee[vehicleType]) {
+    parkingFee = maximumFee[vehicleType]
+  }
+
+  return parkingFee;
 }

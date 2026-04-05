@@ -32,6 +32,23 @@
  * @param {number} overdueBooks - Number of overdue books
  * @returns {{ allowed: boolean, message: string }}
  */
+
+const denyAccess = (msg) => ({allowed: false, message: msg});
+
 export function canBorrowBook(memberAge, hasValidCard, overdueBooks) {
-  // Your code here
+
+  // validatons to check a member can borrow book or not
+  if (memberAge < 6) {
+    return denyAccess("Too young - must be at least 6 years old");
+  }
+
+  if (!hasValidCard) {
+    return denyAccess("Invalid library card - please renew at the front desk");
+  }
+
+  if (overdueBooks > 0) {
+    return denyAccess(`Please return your ${overdueBooks} overdue book(s) first`);
+  }
+
+  return {allowed: true , message: "You may borrow up to 3 books"};
 }
